@@ -3,7 +3,9 @@
 use Test::More tests => 1;
 
 BEGIN {
-	use_ok( 'Email::Sender::Transport::SMTP::TLS' );
+    use_ok('Email::Sender::Transport::SMTP::TLS');
 }
 
-diag( "Testing Email::Sender::Transport::SMTP::TLS $Email::Sender::Transport::SMTP::TLS::VERSION, Perl $], $^X" );
+diag(
+"Testing Email::Sender::Transport::SMTP::TLS $Email::Sender::Transport::SMTP::TLS::VERSION, Perl $], $^X"
+);

@@ -1,21 +1,22 @@
 package Email::Sender::Transport::SMTP::TLS;
+our $VERSION = '0.04';
+
+# ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
 
 use Moose;
-with 'Email::Sender::Transport';
-
-our $VERSION = '0.03';
+with 'Email::Sender::Transport' => { excludes => 'allow_partial_success' };
 
 use Net::SMTP::TLS;
 use Email::Sender::Failure::Multi;
 use Email::Sender::Success::Partial;
 use Email::Sender::Util;
 
-has host => (is => 'ro', isa => 'Str', default => 'localhost');
-has port => (is => 'ro', isa => 'Int', default => 587 );
-has username => (is => 'ro', isa => 'Str', required => 1);
-has password => (is => 'ro', isa => 'Str', required => 1);
-has allow_partial_success => (is => 'ro', isa => 'Bool', default => 0);
-has helo      => (is => 'ro', isa => 'Str'); # default to hostname_long
+has host     => ( is => 'ro', isa => 'Str', default  => 'localhost' );
+has port     => ( is => 'ro', isa => 'Int', default  => 587 );
+has username => ( is => 'ro', isa => 'Str', required => 1 );
+has password => ( is => 'ro', isa => 'Str', required => 1 );
+has allow_partial_success => ( is => 'ro', isa => 'Bool', default => 0 );
+has helo => ( is => 'ro', isa => 'Str' );    # default to hostname_long
 
 # From http://search.cpan.org/src/RJBS/Email-Sender-0.000/lib/Email/Sender/Transport/SMTP.pm
 ## I am basically -sure- that this is wrong, but sending hundreds of millions of
@@ -39,10 +40,10 @@ sub _smtp_client {
     eval {
         $smtp = Net::SMTP::TLS->new(
             $self->host,
-            Port => $self->port,
-            User => $self->username,
+            Port     => $self->port,
+            User     => $self->username,
             Password => $self->password,
-            $self->helo ? (Hello => $self->helo) : (),
+            $self->helo ? ( Hello => $self->helo ) : (),
         );
     };
 
@@ -53,52 +54,47 @@ sub _smtp_client {
 }
 
 sub _throw {
-    my ($self, @rest) = @_;
+    my ( $self, @rest ) = @_;
     Email::Sender::Util->_failure(@rest)->throw;
 }
 
 sub send_email {
-    my ($self, $email, $env) = @_;
+    my ( $self, $email, $env ) = @_;
 
     Email::Sender::Failure->throw("no valid addresses in recipient list")
-        unless my @to = grep { defined and length } @{ $env->{to} };
+      unless my @to = grep { defined and length } @{ $env->{to} };
 
     my $smtp = $self->_smtp_client;
 
-    my $FAULT = sub { $self->_throw($_[0], $smtp); };
+    my $FAULT = sub { $self->_throw( $_[0], $smtp ); };
 
-    eval {
-        $smtp->mail(_quoteaddr($env->{from}));
-    };
+    eval { $smtp->mail( _quoteaddr( $env->{from} ) ); };
     $FAULT->("$env->{from} failed after MAIL FROM: $@") if $@;
 
     my @failures;
     my @ok_rcpts;
-  
+
     for my $addr (@to) {
-        eval {
-            $smtp->to(_quoteaddr($addr));
-        };
-        unless ( $@ ) {
+        eval { $smtp->to( _quoteaddr($addr) ); };
+        unless ($@) {
             push @ok_rcpts, $addr;
-        } else {
+        }
+        else {
+
             # my ($self, $error, $smtp, $error_class, @rest) = @_;
-            push @failures, Email::Sender::Util->_failure(
-                undef,
-                $smtp,
-                recipients => [ $addr ],
-            );
+            push @failures,
+              Email::Sender::Util->_failure( undef, $smtp,
+                recipients => [$addr], );
         }
     }
 
-    if (
-        @failures
-        and ((@ok_rcpts == 0) or (! $self->allow_partial_success))
-    ) {
+    if ( @failures
+        and ( ( @ok_rcpts == 0 ) or ( !$self->allow_partial_success ) ) )
+    {
         $failures[0]->throw if @failures == 1;
 
         my $message = sprintf '%s recipients were rejected during RCPT',
-            @ok_rcpts ? 'some' : 'all';
+          @ok_rcpts ? 'some' : 'all';
 
         Email::Sender::Failure::Multi->throw(
             message  => $message,
@@ -112,27 +108,36 @@ sub send_email {
         $smtp->dataend;
         $smtp->quit;
     };
+
     # ignore $@
 
-  # XXX: We must report partial success (failures) if applicable.
+    # XXX: We must report partial success (failures) if applicable.
     return $self->success unless @failures;
-    return Email::Sender::Success::Partial->new({
-        failure => Email::Sender::Failure::Multi->new({
-          message  => 'some recipients were rejected during RCPT',
-          failures => \@failures
-        }),
-    });
+    return Email::Sender::Success::Partial->new(
+        {
+            failure => Email::Sender::Failure::Multi->new(
+                {
+                    message  => 'some recipients were rejected during RCPT',
+                    failures => \@failures
+                }
+            ),
+        }
+    );
 }
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
-__END__
+=pod
 
 =head1 NAME
 
 Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
+
+=head1 VERSION
+
+version 0.04
 
 =head1 SYNOPSIS
 
@@ -177,7 +182,7 @@ L<Email::Sender> replaces the old and sometimes problematic L<Email::Send> libra
 
 It's still alpha. use it at your own risk!
 
-=head1 ATTRIBUTES
+=head2 ATTRIBUTES
 
 The following attributes may be passed to the constructor:
 
@@ -197,7 +202,7 @@ The following attributes may be passed to the constructor:
 
 =back
 
-=head1 PARTIAL SUCCESS
+=head2 PARTIAL SUCCESS
 
 If C<allow_partial_success> was set when creating the transport, the transport
 may return L<Email::Sender::Success::Partial> objects.  Consult that module's
@@ -205,17 +210,15 @@ documentation.
 
 =head1 AUTHOR
 
-Fayland Lam, C<< <fayland at gmail.com> >>
+  Fayland Lam <fayland@gmail.com>
 
-=head1 ACKNOWLEDGEMENTS
+=head1 COPYRIGHT AND LICENSE
 
-Ricardo SIGNES - L<Email::Sender>
+This software is copyright (c) 2009 by Fayland Lam.
 
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2008 Fayland Lam, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This is free software; you can redistribute it and/or modify it under
+the same terms as perl itself.
 
 =cut
+
+__END__

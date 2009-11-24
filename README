@@ -1,52 +1,74 @@
-Email-Sender-Transport-SMTP-TLS
+NAME
+    Email::Sender::Transport::SMTP::TLS - Email::Sender with Net::SMTP::TLS
+    (Eg. Gmail)
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+VERSION
+    version 0.04
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+SYNOPSIS
+        use Email::Sender::Transport::SMTP::TLS;
 
+        my $sender = Email::Sender::Transport::SMTP::TLS->new(
+            host => 'smtp.gmail.com',
+            port => 587,
+            username => 'username@gmail.com',
+            password => 'password',
+            helo => 'fayland.org',
+        );
+    
+        #   my $message = Mail::Message->read($rfc822)
+        #         || Email::Simple->new($rfc822)
+        #         || Mail::Internet->new([split /\n/, $rfc822])
+        #         || ...
+        #         || $rfc822;
+        # read L<Email::Abstract> for more details
 
-INSTALLATION
+        use Email::Simple::Creator; # or other Email::
+        my $message = Email::Simple->create(
+            header => [
+                From    => 'username@gmail.com',
+                To      => 'to@mail.com',
+                Subject => 'Subject title',
+            ],
+            body => 'Content.',
+        );
+    
+        eval {
+            $sender->send($message, {
+                from => 'username@gmail.com',
+                to   => [ 'to@mail.com' ],
+            } );
+        };
+        die "Error sending email: $@" if $@;
 
-To install this module, run the following commands:
+DESCRIPTION
+    Email::Sender replaces the old and sometimes problematic Email::Send
+    library, while this module replaces the Email::Send::SMTP::TLS.
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
+    It's still alpha. use it at your own risk!
 
-SUPPORT AND DOCUMENTATION
+  ATTRIBUTES
+    The following attributes may be passed to the constructor:
 
-After installing, you can find documentation for this module with the
-perldoc command.
+    host - the name of the host to connect to; defaults to localhost
+    port - port to connect to; defaults to 587
+    username - the username to use for auth; required
+    password - the password to use for auth; required
+    helo - what to say when saying HELO; no default
+    allow_partial_success - if true, will send data even if some recipients
+    were rejected
 
-    perldoc Email::Sender::Transport::SMTP::TLS
+  PARTIAL SUCCESS
+    If "allow_partial_success" was set when creating the transport, the
+    transport may return Email::Sender::Success::Partial objects. Consult
+    that module's documentation.
 
-You can also look for information at:
+AUTHOR
+      Fayland Lam <fayland@gmail.com>
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Email-Sender-Transport-SMTP-TLS
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2009 by Fayland Lam.
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Email-Sender-Transport-SMTP-TLS
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Email-Sender-Transport-SMTP-TLS
-
-    Search CPAN
-        http://search.cpan.org/dist/Email-Sender-Transport-SMTP-TLS/
-
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2008 Fayland Lam
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as perl itself.
 
