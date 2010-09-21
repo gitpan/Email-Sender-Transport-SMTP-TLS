@@ -1,7 +1,7 @@
 package Email::Sender::Transport::SMTP::TLS;
 
 BEGIN {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.05';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.06';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -49,7 +49,6 @@ sub _smtp_client {
         );
     };
 
-    warn $@ if $@;
     $self->_throw($@) if $@;
     $self->_throw("unable to establish SMTP connection") unless $smtp;
 
@@ -170,7 +169,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 SYNOPSIS
 

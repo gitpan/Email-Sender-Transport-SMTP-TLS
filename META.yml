@@ -17,4 +17,4 @@ requires:
   Net::SMTP::TLS: 0
 resources:
   repository: http://github.com/fayland/email-sender-transport-smtp-tls
-version: 0.05
+version: 0.06

@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
     'Email::Sender' => '0.102370',
     'Net::SMTP::TLS' => '0'
   },
-  'VERSION' => '0.05',
+  'VERSION' => '0.06',
   'test' => {
     'TESTS' => 't/*.t'
   }
