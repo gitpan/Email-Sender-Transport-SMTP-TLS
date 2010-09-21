@@ -3,10 +3,12 @@ NAME
     (Eg. Gmail)
 
 VERSION
-    version 0.04
+    version 0.05
 
 SYNOPSIS
+        use Email::Sender::Simple qw(sendmail);
         use Email::Sender::Transport::SMTP::TLS;
+        use Try::Tiny;
 
         my $sender = Email::Sender::Transport::SMTP::TLS->new(
             host => 'smtp.gmail.com',
@@ -15,8 +17,8 @@ SYNOPSIS
             password => 'password',
             helo => 'fayland.org',
         );
-    
-        #   my $message = Mail::Message->read($rfc822)
+        
+    # my $message = Mail::Message->read($rfc822)
         #         || Email::Simple->new($rfc822)
         #         || Mail::Internet->new([split /\n/, $rfc822])
         #         || ...
@@ -32,20 +34,18 @@ SYNOPSIS
             ],
             body => 'Content.',
         );
-    
-        eval {
-            $sender->send($message, {
-                from => 'username@gmail.com',
-                to   => [ 'to@mail.com' ],
-            } );
+        
+    try {
+            sendmail($message, { transport => $transport });
+        } catch {
+            die "Error sending email: $_";
         };
-        die "Error sending email: $@" if $@;
 
 DESCRIPTION
     Email::Sender replaces the old and sometimes problematic Email::Send
     library, while this module replaces the Email::Send::SMTP::TLS.
 
-    It's still alpha. use it at your own risk!
+    It is still alpha, but it works. use it at your own risk!
 
   ATTRIBUTES
     The following attributes may be passed to the constructor:
@@ -64,11 +64,11 @@ DESCRIPTION
     that module's documentation.
 
 AUTHOR
-      Fayland Lam <fayland@gmail.com>
+    Fayland Lam <fayland@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2009 by Fayland Lam.
+    This software is copyright (c) 2010 by Fayland Lam.
 
     This is free software; you can redistribute it and/or modify it under
-    the same terms as perl itself.
+    the same terms as the Perl 5 programming language system itself.
 

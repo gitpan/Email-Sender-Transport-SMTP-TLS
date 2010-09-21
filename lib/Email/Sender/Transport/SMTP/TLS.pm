@@ -1,10 +1,12 @@
 package Email::Sender::Transport::SMTP::TLS;
-our $VERSION = '0.04';
+
+BEGIN {
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.05';
+}
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
 
-use Moose;
-with 'Email::Sender::Transport' => { excludes => 'allow_partial_success' };
+use Moose 0.90;
 
 use Net::SMTP::TLS;
 use Email::Sender::Failure::Multi;
@@ -47,6 +49,7 @@ sub _smtp_client {
         );
     };
 
+    warn $@ if $@;
     $self->_throw($@) if $@;
     $self->_throw("unable to establish SMTP connection") unless $smtp;
 
@@ -102,19 +105,22 @@ sub send_email {
         );
     }
 
+    my $message;
     eval {
         $smtp->data();
         $smtp->datasend( $email->as_string );
         $smtp->dataend;
+        $message = $smtp->message;
         $smtp->quit;
     };
 
     # ignore $@
 
     # XXX: We must report partial success (failures) if applicable.
-    return $self->success unless @failures;
-    return Email::Sender::Success::Partial->new(
+    return $self->success( { message => $message } ) unless @failures;
+    return $self->partial_success(
         {
+            message => $message,
             failure => Email::Sender::Failure::Multi->new(
                 {
                     message  => 'some recipients were rejected during RCPT',
@@ -125,6 +131,33 @@ sub send_email {
     );
 }
 
+my %SUCCESS_CLASS;
+
+BEGIN {
+    $SUCCESS_CLASS{FULL} = Moose::Meta::Class->create_anon_class(
+        superclasses => ['Email::Sender::Success'],
+        roles        => ['Email::Sender::Role::HasMessage'],
+        cache        => 1,
+    );
+    $SUCCESS_CLASS{PARTIAL} = Moose::Meta::Class->create_anon_class(
+        superclasses => ['Email::Sender::Success::Partial'],
+        roles        => ['Email::Sender::Role::HasMessage'],
+        cache        => 1,
+    );
+}
+
+sub success {
+    my $self    = shift;
+    my $success = $SUCCESS_CLASS{FULL}->name->new(@_);
+}
+
+sub partial_success {
+    my ( $self, @args ) = @_;
+    my $obj = $SUCCESS_CLASS{PARTIAL}->name->new(@args);
+    return $obj;
+}
+
+with 'Email::Sender::Transport';
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
@@ -137,11 +170,13 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
+    use Email::Sender::Simple qw(sendmail);
     use Email::Sender::Transport::SMTP::TLS;
+    use Try::Tiny;
 
     my $sender = Email::Sender::Transport::SMTP::TLS->new(
         host => 'smtp.gmail.com',
@@ -151,7 +186,7 @@ version 0.04
         helo => 'fayland.org',
     );
     
-    #   my $message = Mail::Message->read($rfc822)
+    # my $message = Mail::Message->read($rfc822)
     #         || Email::Simple->new($rfc822)
     #         || Mail::Internet->new([split /\n/, $rfc822])
     #         || ...
@@ -168,19 +203,17 @@ version 0.04
         body => 'Content.',
     );
     
-    eval {
-        $sender->send($message, {
-            from => 'username@gmail.com',
-            to   => [ 'to@mail.com' ],
-        } );
+    try {
+        sendmail($message, { transport => $transport });
+    } catch {
+        die "Error sending email: $_";
     };
-    die "Error sending email: $@" if $@;
 
 =head1 DESCRIPTION
 
 L<Email::Sender> replaces the old and sometimes problematic L<Email::Send> library, while this module replaces the L<Email::Send::SMTP::TLS>.
 
-It's still alpha. use it at your own risk!
+It is still alpha, but it works. use it at your own risk!
 
 =head2 ATTRIBUTES
 
@@ -210,14 +243,14 @@ documentation.
 
 =head1 AUTHOR
 
-  Fayland Lam <fayland@gmail.com>
+Fayland Lam <fayland@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Fayland Lam.
+This software is copyright (c) 2010 by Fayland Lam.
 
 This is free software; you can redistribute it and/or modify it under
-the same terms as perl itself.
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
