@@ -1,7 +1,7 @@
 package Email::Sender::Transport::SMTP::TLS;
 
 BEGIN {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.06';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.07';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -169,7 +169,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -177,7 +177,7 @@ version 0.06
     use Email::Sender::Transport::SMTP::TLS;
     use Try::Tiny;
 
-    my $sender = Email::Sender::Transport::SMTP::TLS->new(
+    my $transport = Email::Sender::Transport::SMTP::TLS->new(
         host => 'smtp.gmail.com',
         port => 587,
         username => 'username@gmail.com',
