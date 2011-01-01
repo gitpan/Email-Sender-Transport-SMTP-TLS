@@ -21,9 +21,9 @@ my %WriteMakefileArgs = (
   'NAME' => 'Email::Sender::Transport::SMTP::TLS',
   'PREREQ_PM' => {
     'Email::Sender' => '0.102370',
-    'Net::SMTP::TLS' => '0'
+    'Net::SMTP::TLS::ButMaintained' => '0.13'
   },
-  'VERSION' => '0.07',
+  'VERSION' => '0.08',
   'test' => {
     'TESTS' => 't/*.t'
   }

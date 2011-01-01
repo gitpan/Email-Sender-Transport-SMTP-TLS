@@ -1,11 +1,13 @@
-#!perl -T
+#!perl
 
-use Test::More tests => 1;
+use strict;
+use warnings;
 
-BEGIN {
-    use_ok('Email::Sender::Transport::SMTP::TLS');
-}
+use Test::More;
 
-diag(
-"Testing Email::Sender::Transport::SMTP::TLS $Email::Sender::Transport::SMTP::TLS::VERSION, Perl $], $^X"
-);
+
+
+  plan tests => 1;
+
+use_ok('Email::Sender::Transport::SMTP::TLS');
+diag("Testing Email::Sender::Transport::SMTP::TLS $Email::Sender::Transport::SMTP::TLS::VERSION, Perl $], $^X");

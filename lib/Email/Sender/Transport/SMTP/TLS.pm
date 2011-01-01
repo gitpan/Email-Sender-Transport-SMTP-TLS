@@ -1,7 +1,7 @@
 package Email::Sender::Transport::SMTP::TLS;
 
 BEGIN {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.07';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.08';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -169,7 +169,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 
@@ -246,7 +246,7 @@ Fayland Lam <fayland@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Fayland Lam.
+This software is copyright (c) 2011 by Fayland Lam.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
