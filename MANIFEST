@@ -1,11 +1,13 @@
 Changes
 LICENSE
 MANIFEST
+META.json
 META.yml
 Makefile.PL
 README
 dist.ini
 lib/Email/Sender/Transport/SMTP/TLS.pm
-t/00-load.t
+t/00-compile.t
+t/ok.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

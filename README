@@ -3,7 +3,7 @@ NAME
     (Eg. Gmail)
 
 VERSION
-    version 0.09
+    version 0.10
 
 SYNOPSIS
         use Email::Sender::Simple qw(sendmail);
@@ -17,8 +17,8 @@ SYNOPSIS
             password => 'password',
             helo => 'fayland.org',
         );
-        
-    # my $message = Mail::Message->read($rfc822)
+    
+        # my $message = Mail::Message->read($rfc822)
         #         || Email::Simple->new($rfc822)
         #         || Mail::Internet->new([split /\n/, $rfc822])
         #         || ...
@@ -34,8 +34,8 @@ SYNOPSIS
             ],
             body => 'Content.',
         );
-        
-    try {
+    
+        try {
             sendmail($message, { transport => $transport });
         } catch {
             die "Error sending email: $_";

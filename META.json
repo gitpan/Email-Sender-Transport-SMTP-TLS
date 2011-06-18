@@ -1,0 +1,39 @@
+{
+   "abstract" : "Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)",
+   "author" : [
+      "Fayland Lam <fayland@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.102400",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Email-Sender-Transport-SMTP-TLS",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.31"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Email::Sender" : "0.110001",
+            "Net::SMTP::TLS::ButMaintained" : "0.17"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/fayland/email-sender-transport-smtp-tls.git",
+         "web" : "http://github.com/fayland/email-sender-transport-smtp-tls"
+      }
+   },
+   "version" : "0.10"
+}
+
