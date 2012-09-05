@@ -3,7 +3,7 @@ NAME
     (Eg. Gmail)
 
 VERSION
-    version 0.10
+    version 0.11
 
 SYNOPSIS
         use Email::Sender::Simple qw(sendmail);
@@ -17,7 +17,7 @@ SYNOPSIS
             password => 'password',
             helo => 'fayland.org',
         );
-    
+
         # my $message = Mail::Message->read($rfc822)
         #         || Email::Simple->new($rfc822)
         #         || Mail::Internet->new([split /\n/, $rfc822])
@@ -34,7 +34,7 @@ SYNOPSIS
             ],
             body => 'Content.',
         );
-    
+
         try {
             sendmail($message, { transport => $transport });
         } catch {
@@ -67,7 +67,7 @@ AUTHOR
     Fayland Lam <fayland@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2011 by Fayland Lam.
+    This software is copyright (c) 2012 by Fayland Lam.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

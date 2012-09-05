@@ -4,28 +4,28 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)',
-  'AUTHOR' => 'Fayland Lam <fayland@gmail.com>',
-  'BUILD_REQUIRES' => {},
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "ABSTRACT" => "Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)",
+  "AUTHOR" => "Fayland Lam <fayland\@gmail.com>",
+  "BUILD_REQUIRES" => {},
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Email-Sender-Transport-SMTP-TLS',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Email::Sender::Transport::SMTP::TLS',
-  'PREREQ_PM' => {
-    'Email::Sender' => '0.110001',
-    'Net::SMTP::TLS::ButMaintained' => '0.17'
+  "DISTNAME" => "Email-Sender-Transport-SMTP-TLS",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Email::Sender::Transport::SMTP::TLS",
+  "PREREQ_PM" => {
+    "Email::Sender" => "0.110001",
+    "Net::SMTP::TLS::ButMaintained" => "0.17"
   },
-  'VERSION' => '0.10',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.11",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

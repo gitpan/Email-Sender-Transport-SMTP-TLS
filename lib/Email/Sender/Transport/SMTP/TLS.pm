@@ -1,7 +1,6 @@
 package Email::Sender::Transport::SMTP::TLS;
-
-BEGIN {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.10';
+{
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.11';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -70,7 +69,7 @@ sub send_email {
 
     my $smtp = $self->_smtp_client;
 
-    my $FAULT = sub { $self->_throw( $_[0], $smtp ); };
+    my $FAULT = sub { $self->_throw( $_[0] ); };
 
     eval { $smtp->mail( _quoteaddr( $env->{from} ) ); };
     $FAULT->("$env->{from} failed after MAIL FROM: $@") if $@;
@@ -84,10 +83,9 @@ sub send_email {
             push @ok_rcpts, $addr;
         }
         else {
-
             # my ($self, $error, $smtp, $error_class, @rest) = @_;
             push @failures,
-              Email::Sender::Util->_failure( undef, $smtp,
+              Email::Sender::Util->_failure( undef, undef,
                 recipients => [$addr], );
         }
     }
@@ -167,6 +165,8 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
+__END__
+
 =pod
 
 =head1 NAME
@@ -175,7 +175,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
@@ -190,7 +190,7 @@ version 0.10
         password => 'password',
         helo => 'fayland.org',
     );
-    
+
     # my $message = Mail::Message->read($rfc822)
     #         || Email::Simple->new($rfc822)
     #         || Mail::Internet->new([split /\n/, $rfc822])
@@ -207,7 +207,7 @@ version 0.10
         ],
         body => 'Content.',
     );
-    
+
     try {
         sendmail($message, { transport => $transport });
     } catch {
@@ -252,11 +252,9 @@ Fayland Lam <fayland@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Fayland Lam.
+This software is copyright (c) 2012 by Fayland Lam.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-__END__
