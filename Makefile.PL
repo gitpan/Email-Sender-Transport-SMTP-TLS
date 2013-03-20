@@ -20,10 +20,10 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Email::Sender::Transport::SMTP::TLS",
   "PREREQ_PM" => {
-    "Email::Sender" => "0.110001",
+    "Email::Sender" => "1.300007",
     "Net::SMTP::TLS::ButMaintained" => "0.17"
   },
-  "VERSION" => "0.11",
+  "VERSION" => "0.12",
   "test" => {
     "TESTS" => "t/*.t"
   }
