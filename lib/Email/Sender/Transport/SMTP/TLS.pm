@@ -1,6 +1,6 @@
 package Email::Sender::Transport::SMTP::TLS;
 {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.12';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.13';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -72,7 +72,7 @@ sub send_email {
 
     my $smtp = $self->_smtp_client;
 
-    my $FAULT = sub { $self->_throw( $_[0], $smtp ); };
+    my $FAULT = sub { $self->_throw( $_[0] ); };
 
     eval { $smtp->mail( _quoteaddr( $env->{from} ) ); };
     $FAULT->("$env->{from} failed after MAIL FROM: $@") if $@;
@@ -88,7 +88,7 @@ sub send_email {
         else {
             # my ($self, $error, $smtp, $error_class, @rest) = @_;
             push @failures,
-              Email::Sender::Util->_failure( undef, $smtp,
+              Email::Sender::Util->_failure( $@, undef,
                 recipients => [$addr], );
         }
     }
@@ -165,7 +165,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 SYNOPSIS
 
