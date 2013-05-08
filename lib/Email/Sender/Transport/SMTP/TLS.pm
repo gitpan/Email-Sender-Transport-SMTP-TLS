@@ -1,6 +1,6 @@
 package Email::Sender::Transport::SMTP::TLS;
 {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.13';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.14';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -165,7 +165,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 

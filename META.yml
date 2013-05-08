@@ -13,10 +13,10 @@ meta-spec:
   version: 1.4
 name: Email-Sender-Transport-SMTP-TLS
 requires:
-  Email::Sender: 1.300007
+  Email::Sender: 1.300006
   Net::SMTP::TLS::ButMaintained: 0.17
 resources:
   repository: git://github.com/fayland/email-sender-transport-smtp-tls.git
-version: 0.13
+version: 0.14
 x_contributors:
   - 'fayland <fayland@gmail.com>'
