@@ -3,7 +3,7 @@ NAME
     (Eg. Gmail)
 
 VERSION
-    version 0.14
+    version 0.15
 
 SYNOPSIS
         use Email::Sender::Simple qw(sendmail);
@@ -42,6 +42,9 @@ SYNOPSIS
         };
 
 DESCRIPTION
+    If you have never used it before, please try
+    Email::Sender::Transport::SMTPS instead. it's recommended.
+
     Email::Sender replaces the old and sometimes problematic Email::Send
     library, while this module replaces the Email::Send::SMTP::TLS.
 

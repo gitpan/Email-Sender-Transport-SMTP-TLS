@@ -1,6 +1,6 @@
 package Email::Sender::Transport::SMTP::TLS;
 {
-    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.14';
+    $Email::Sender::Transport::SMTP::TLS::VERSION = '0.15';
 }
 
 # ABSTRACT: Email::Sender with L<Net::SMTP::TLS> (Eg. Gmail)
@@ -165,7 +165,7 @@ Email::Sender::Transport::SMTP::TLS - Email::Sender with L<Net::SMTP::TLS> (Eg. 
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
@@ -205,6 +205,8 @@ version 0.14
     };
 
 =head1 DESCRIPTION
+
+B<If you have never used it before, please try L<Email::Sender::Transport::SMTPS> instead. it's recommended.>
 
 L<Email::Sender> replaces the old and sometimes problematic L<Email::Send> library, while this module replaces the L<Email::Send::SMTP::TLS>.
 
